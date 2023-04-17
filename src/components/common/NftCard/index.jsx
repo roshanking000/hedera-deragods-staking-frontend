@@ -40,7 +40,6 @@ const NftCard = ({
                             >
                                 STAKE
                             </button>
-                            <img width="36" height="36" loading="lazy" src="/images/screenshot-1.png" />
                         </div>
                     </div>
                 }
