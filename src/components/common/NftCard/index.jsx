@@ -24,12 +24,12 @@ const NftCard = ({
                     <div className="p-2">
                         <div className='flex flex-row items-center justify-between mb-2'>
                             <div className='flex flex-row items-center'>
-                                <h5 className="text-sm xl:text-xl text-amber-400 truncate ...">5/ day</h5>
+                                <h5 className="text-md text-amber-400">5/ day</h5>
                                 <img width="36" height="36" loading="lazy" src="/images/iconzap.png" />
                             </div>
                             <div className='flex flex-row items-center'>
                                 <img width="24" loading="lazy" src="/images/dot.png" />
-                                <h5 className="text-sm lg:text-xl truncate ...">{nftInfo.name}</h5>
+                                <h5 className="text-md truncate ...">{nftInfo.name}</h5>
                             </div>
                         </div>
                         <div className='flex flex-row justify-between items-center'>
@@ -40,6 +40,7 @@ const NftCard = ({
                             >
                                 STAKE
                             </button>
+                            <img width="36" height="36" loading="lazy" src="/images/screenshot-1.png" />
                         </div>
                     </div>
                 }
@@ -49,11 +50,11 @@ const NftCard = ({
                         <div className='flex flex-row items-center justify-between mb-2'>
                             <div className='flex flex-row items-center'>
                                 <img width="36" height="36" loading="lazy" src="/images/iconzap.png" />
-                                <h5 className="text-sm xl:text-xl text-amber-400 truncate ...">{nftInfo.point}</h5>
+                                <h5 className="text-md text-amber-400">{nftInfo.point + nftInfo.reward}</h5>
                             </div>
                             <div className='flex flex-row items-center'>
                                 <img width="24" loading="lazy" src="/images/dot.png" />
-                                <h5 className="text-sm lg:text-xl truncate ...">{nftInfo.name}</h5>
+                                <h5 className="text-md truncate ...">{nftInfo.name}</h5>
                             </div>
                         </div>
                         <div className='flex flex-row justify-between items-center'>
