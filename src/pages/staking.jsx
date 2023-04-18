@@ -136,7 +136,7 @@ const StakingPage = () => {
     // get nft list in wallet
     const _nftData = await getWalletNftData();
 
-    const _result = await getRequest(env.SERVER_URL + "/api/user/user_info?discordName=" + userDetails.username + "&discriminator=" + userDetails.discriminator + "&walletId=" + walletId + "&nftData=" + JSON.stringify(_nftData))
+    const _result = await getRequest(env.SERVER_URL + "/api/user/user_info?discordName=" + userDetails.username + "&discriminator=" + userDetails.discriminator + "&discordId=" + userDetails.id + "&walletId=" + walletId + "&nftData=" + JSON.stringify(_nftData))
     if (!_result) {
       toast.error("Something wrong with server!")
       setLoadingView(false)
@@ -306,6 +306,7 @@ const StakingPage = () => {
     };
 
     const _postData = {
+      discordId: btoa(userDetails.id),
       discordName: btoa(userDetails.username),
       discriminator: btoa(userDetails.discriminator),
       walletId: btoa(walletId),
@@ -336,6 +337,7 @@ const StakingPage = () => {
     };
 
     const _postData = {
+      discordId: btoa(userDetails.id),
       discordName: btoa(userDetails.username),
       discriminator: btoa(userDetails.discriminator),
       walletId: btoa(walletId),
