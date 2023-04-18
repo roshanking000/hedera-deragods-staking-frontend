@@ -97,6 +97,7 @@ const StakingPage = () => {
           authorization: `${accessToken.token_type} ${accessToken.access_token}`
         }
       });
+      console.log(response.data)
       setUserDetails(response.data);
       return response.data;
     } catch (error) {
@@ -382,19 +383,19 @@ const StakingPage = () => {
         <a href="https://www.plutopeer.com/" target="_blank" rel="noreferrer">
           <img className='absolute left-[15px] bottom-[20px]' width="140" loading="lazy" src="/icons/Plutopeer.png" />
         </a>
-        <div className='absolute flex flex-row gap-4 top-8 right-24'>
+        <div className='absolute flex flex-row gap-4 top-24 right-8 md:top-8 md:right-24'>
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
-            setdiscordLoginFlag(true);
-            if (walletId == "0.0.1690607")
-              setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
-            else if (walletId == "0.0.1690594")
-              setUserDetails({ username: "BayMax", discriminator: "2069" });
+            // setdiscordLoginFlag(true);
+            // if (walletId == "0.0.1690607")
+            //   setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
+            // else if (walletId == "0.0.1690594")
+            //   setUserDetails({ username: "BayMax", discriminator: "2069" });
 
-            if (walletId != null)
-              checkUser()
-            else
-              setText("You must connect HashPack Wallet");
-            // window.location = AUTHORIZATION_URL
+            // if (walletId != null)
+            //   checkUser()
+            // else
+            //   setText("You must connect HashPack Wallet");
+            window.location = AUTHORIZATION_URL
           }} />
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={() => {
             if (walletId != null) {
@@ -419,7 +420,7 @@ const StakingPage = () => {
         }
         {
           walletId != null &&
-          <div className='flex flex-col w-3/5 mb-12 pl-8 pt-8 pr-8 pb-8 gap-8 rounded-xl overflow-y-auto'>
+          <div className='flex flex-col w-4/5 md:w-3/5 mb-12 pl-8 mt-12 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {
                 walletNftList?.map((item, index) => {

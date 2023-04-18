@@ -43,14 +43,14 @@ const NftCard = ({
                             </div>
                         </div>
                         <div className='flex flex-row justify-start items-center gap-4'>
-                            <button type="button" className='font-mono font-bold text-2xl bottom-3 w-48 inline-flex items-center justify-center py-2 tracking-wide text-center text-grey-200 bg-[#c1fe9c] rounded-xl hover:scale-[0.95] hover:bg-lime-800'
+                            <button type="button" className='font-mono font-bold text-2xl bottom-3 w-48 inline-flex items-center justify-center py-2 tracking-wide text-center text-grey-200 bg-lime-500 rounded-xl hover:scale-[0.95] hover:bg-lime-800'
                                 onClick={() => {
                                     onClickStake(nftInfo);
                                 }}
                             >
                                 STAKE
                             </button>
-                            <img className='hover:cursor-pointer' width="36" height="36" loading="lazy" src="/images/screenshotic.png" onClick={getImage} />
+                            <img className='hover:cursor-pointer' width="36" height="36" loading="lazy" src="/images/screenshotic.png" onClick={getImage} hidden />
                         </div>
                     </div>
                 }
@@ -75,7 +75,7 @@ const NftCard = ({
                             >
                                 UNSTAKE
                             </button>
-                            <img className='hover:cursor-pointer' width="36" height="36" loading="lazy" src="/images/screenshotic.png" onClick={getImage} />
+                            <img className='hover:cursor-pointer' width="36" height="36" loading="lazy" src="/images/screenshotic.png" onClick={getImage} hidden />
                         </div>
                     </div>
                 }
