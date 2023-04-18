@@ -20,8 +20,7 @@ const StakingPage = () => {
   const [loadingView, setLoadingView] = useState(false);
   const [discordLoginFlag, setdiscordLoginFlag] = useState(false);
 
-  // const [userDetails, setUserDetails] = useState(null);
-  const [userDetails, setUserDetails] = useState({ username: "PhoenixDev", discriminator: "6938" });
+  const [userDetails, setUserDetails] = useState(null);
   const [token, setToken] = useState(null);
   const [text, setText] = useState("You must connect your Discord")
 
@@ -84,6 +83,7 @@ const StakingPage = () => {
     }
   };
 
+  {/** -------------- Discord Login --------------- */ }
   const getInfo = async (code) => {
     //    const accessToken = token == null ? await getToken(code) : token;
     const accessToken = await getToken(code)
@@ -127,11 +127,15 @@ const StakingPage = () => {
       console.log(error);
     }
   }
+  {/** ---------------------------------------- */ }
 
   const checkUser = async () => {
     setLoadingView(true)
 
-    const _result = await getRequest(env.SERVER_URL + "/api/user/user_info?discordName=" + userDetails.username + "&discriminator=" + userDetails.discriminator + "&walletId=" + walletId)
+    // get nft list in wallet
+    const _nftData = await getWalletNftData();
+
+    const _result = await getRequest(env.SERVER_URL + "/api/user/user_info?discordName=" + userDetails.username + "&discriminator=" + userDetails.discriminator + "&walletId=" + walletId + "&nftData=" + JSON.stringify(_nftData))
     if (!_result) {
       toast.error("Something wrong with server!")
       setLoadingView(false)
@@ -143,13 +147,43 @@ const StakingPage = () => {
       return
     }
 
-    // get nft list in wallet
-    await getWalletNftData(_result.data);
+    await getNftDetailData(_nftData, _result.data)
 
     setLoadingView(false)
   }
 
-  const getWalletNftData = async (stakedNftList_) => {
+  const getNftDetailData = async (_nftData, stakedNftList_) => {
+    let _newWalletNftInfo = []
+    for (let i = 0; i < _nftData.length; i++) {
+      let _nftInfoResponse = await getNftInfoFromMirrorNet(_nftData[i].token_id, _nftData[i].serial_number);
+
+      if (_nftInfoResponse.result) {
+        let _stakeStatus = "unstaked"
+        let point_ = 0
+        let reward_ = 0
+        for (let j = 0; j < stakedNftList_.length; j++) {
+          if (stakedNftList_[j].token_id == _nftData[i].token_id && parseInt(stakedNftList_[j].serial_number, 10) == _nftData[i].serial_number) {
+            _stakeStatus = "staked"
+            point_ = stakedNftList_[j].point
+            reward_ = stakedNftList_[j].reward
+          }
+        }
+        _newWalletNftInfo.push({
+          token_id: _nftData[i].token_id,
+          serial_number: _nftData[i].serial_number,
+          imageUrl: _nftInfoResponse.metaData.imageUrl,
+          name: _nftInfoResponse.metaData.name,
+          creator: _nftInfoResponse.metaData.creator,
+          status: _stakeStatus,
+          point: point_,
+          reward: reward_
+        })
+      }
+    }
+    setWalletNftList(_newWalletNftInfo);
+  }
+
+  const getWalletNftData = async () => {
     let _newWalletNftInfo = [];
     let _WNinfo;
     let _nextLink = null;
@@ -170,40 +204,13 @@ const StakingPage = () => {
 
     while (1) {
       let _tempNftInfo = _WNinfo.nfts;
-      console.log(_tempNftInfo)
 
       for (let i = 0; i < _tempNftInfo.length; i++) {
-        if (_tempNftInfo[i].token_id == env.DERAGODS_NFT_ID) {
-          let _nftInfoResponse = await getNftInfoFromMirrorNet(_tempNftInfo[i].token_id, _tempNftInfo[i].serial_number);
-
-          if (_nftInfoResponse.result) {
-            let _stakeStatus = "unstaked"
-            let point_ = 0
-            for (let j = 0; j < stakedNftList_.length; j++) {
-              if (stakedNftList_[j].token_id == _tempNftInfo[i].token_id && parseInt(stakedNftList_[j].serial_number, 10) == _tempNftInfo[i].serial_number) {
-                _stakeStatus = "staked"
-                point_ = stakedNftList_[j].point
-              }
-            }
-            _newWalletNftInfo.push({
-              token_id: _tempNftInfo[i].token_id,
-              serial_number: _tempNftInfo[i].serial_number,
-              imageUrl: _nftInfoResponse.metaData.imageUrl,
-              name: _nftInfoResponse.metaData.name,
-              creator: _nftInfoResponse.metaData.creator,
-              status: _stakeStatus,
-              point: point_
-            })
-          }
-        }
+        if (_tempNftInfo[i].token_id == env.DERAGODS_NFT_ID)
+          _newWalletNftInfo.push(_tempNftInfo[i])
       }
 
       if (!_nextLink || _nextLink === null) break;
-
-      if (_newWalletNftInfo.length >= 10) {
-        setMirrorNodeNextLink(_nextLink);
-        break;
-      }
 
       _WNinfo = await getRequest(env.MIRROR_NET_URL + _nextLink);
       _nextLink = null;
@@ -214,11 +221,7 @@ const StakingPage = () => {
     if (_newWalletNftInfo.length == 0)
       setText("You are not a DeraGods holder");
 
-    if (walletNftList)
-      setWalletNftList(walletNftList.concat(_newWalletNftInfo));
-    else
-      setWalletNftList(_newWalletNftInfo);
-    console.log(_newWalletNftInfo);
+    return _newWalletNftInfo
   }
 
   const getNftInfoFromMirrorNet = async (tokenId_, serialNum_) => {
@@ -319,7 +322,7 @@ const StakingPage = () => {
       setLoadingView(false);
       return;
     }
-    reloadNftList(nftInfo_, "staked")
+    reloadNftList(nftInfo_, _res.point, _res.reward, "staked")
     toast.success(_res.msg)
     setLoadingView(false)
   }
@@ -349,20 +352,23 @@ const StakingPage = () => {
       setLoadingView(false);
       return;
     }
-    reloadNftList(nftInfo_, "unstaked")
+    reloadNftList(nftInfo_, 0, 0, "unstaked")
     toast.success(_res.msg);
     setLoadingView(false);
   }
 
-  const reloadNftList = (nftInfo_, status_) => {
+  const reloadNftList = (nftInfo_, point_, reward_, status_) => {
     // reload status
     let _walletData = []
     for (let i = 0; i < walletNftList.length; i++) {
       _walletData.push(walletNftList[i])
     }
     for (let i = 0; i < _walletData.length; i++) {
-      if (_walletData[i].token_id == nftInfo_.token_id && _walletData[i].serial_number == nftInfo_.serial_number)
+      if (_walletData[i].token_id == nftInfo_.token_id && _walletData[i].serial_number == nftInfo_.serial_number) {
         _walletData[i].status = status_
+        _walletData[i].point = point_
+        _walletData[i].reward = reward_
+      }
     }
     setWalletNftList(_walletData)
   }
@@ -379,6 +385,11 @@ const StakingPage = () => {
         <div className='absolute flex flex-row gap-4 top-8 right-24'>
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
             setdiscordLoginFlag(true);
+            if (walletId == "0.0.1690607")
+              setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
+            else if (walletId == "0.0.1690594")
+              setUserDetails({ username: "BayMax", discriminator: "2069" });
+
             if (walletId != null)
               checkUser()
             else
@@ -396,15 +407,15 @@ const StakingPage = () => {
         </div>
         {
           walletId == null &&
-          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-red-900 md:text-5xl lg:text-6xl">{text}</h1>
+          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">{text}</h1>
         }
         {
           walletId != null && discordLoginFlag == false &&
-          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-red-900 md:text-5xl lg:text-6xl">{text}</h1>
+          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">{text}</h1>
         }
         {
           walletId != null && text == "You are not a DeraGods holder" &&
-          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-red-900 md:text-5xl lg:text-6xl">{text}</h1>
+          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">{text}</h1>
         }
         {
           walletId != null &&
@@ -413,7 +424,8 @@ const StakingPage = () => {
               {
                 walletNftList?.map((item, index) => {
                   return (
-                    <NftCard key={index}
+                    <NftCard
+                      key={index}
                       nftInfo={item}
                       onClickStake={async (nftInfo) => {
                         await onStakeHandle(nftInfo);
