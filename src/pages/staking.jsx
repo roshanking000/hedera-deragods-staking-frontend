@@ -387,17 +387,17 @@ const StakingPage = () => {
         </a>
         <div className='absolute flex flex-row gap-4 top-24 right-8 md:top-8 md:right-24'>
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
-            // setdiscordLoginFlag(true);
-            // if (walletId == "0.0.1690607")
-            //   setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
-            // else if (walletId == "0.0.1690594")
-            //   setUserDetails({ username: "BayMax", discriminator: "2069" });
+            setdiscordLoginFlag(true);
+            if (walletId == "0.0.1690607")
+              setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
+            else if (walletId == "0.0.1690594")
+              setUserDetails({ username: "BayMax", discriminator: "2069" });
 
-            // if (walletId != null)
-            //   checkUser()
-            // else
-            //   setText("You must connect HashPack Wallet");
-            window.location = AUTHORIZATION_URL
+            if (walletId != null)
+              checkUser()
+            else
+              setText("You must connect HashPack Wallet");
+            // window.location = AUTHORIZATION_URL
           }} />
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={() => {
             if (walletId != null) {
@@ -410,15 +410,15 @@ const StakingPage = () => {
         </div>
         {
           walletId == null &&
-          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">{text}</h1>
+          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null && discordLoginFlag == false &&
-          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">{text}</h1>
+          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null && text == "You are not a DeraGods holder" &&
-          <h1 className="mt-16 text-2xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl">{text}</h1>
+          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null &&
