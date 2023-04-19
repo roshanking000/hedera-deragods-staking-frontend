@@ -378,7 +378,19 @@ const StakingPage = () => {
 
   return (
     <>
-      <div className='staking-container'>
+      <div>
+        <video
+          autoPlay
+          loop
+          muted
+          className="absolute w-[97%] h-[100%] opacity-50"
+        >
+          <source
+            src="/videos/forbc.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
         <a href="https://deragods-staking.web.app/">
           <img width="108" loading="lazy" src="/icons/Logo.png" />
         </a>
