@@ -16,5 +16,5 @@ export const COINGECKO_URL = "https://api.coingecko.com";
 export const SERVER_URL = "http://95.217.63.153:5000";
 // export const SERVER_URL = "https://degenland.tech:3306";
 
-export const DERAGODS_NFT_ID = "0.0.1122159";
+export const DERAGODS_NFT_ID = "0.0.1099951";
 export const DERAGODS_NFT_COUNT = 303;

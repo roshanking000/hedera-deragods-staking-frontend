@@ -37,7 +37,6 @@ const StakingPage = () => {
 
   useEffect(() => {
     if (walletData.pairingData != null) {
-      console.log(walletData.pairingData.length)
       if (walletData.pairingData.length != 0) {
         if (walletData.pairingData.length == undefined) {
           setWalletId(walletData.pairingData.accountIds[0])
@@ -48,7 +47,6 @@ const StakingPage = () => {
       }
     }
     else {
-      console.log(null)
       setWalletId(null)
     }
   }, [walletData]);
@@ -92,8 +90,6 @@ const StakingPage = () => {
       return
     }
 
-    console.log(_result.data)
-
     setStakedNftCount(_result.data.stakedNftCount)
     setLockedValue(_result.data.lockedValue)
     setRewardedValue(_result.data.rewardedValue)
@@ -129,7 +125,6 @@ const StakingPage = () => {
           authorization: `${accessToken.token_type} ${accessToken.access_token}`
         }
       });
-      console.log(response.data)
       setUserDetails(response.data);
       return response.data;
     } catch (error) {
@@ -433,7 +428,6 @@ const StakingPage = () => {
           </a>
           <div className='absolute flex flex-row gap-4 top-24 right-8 md:top-8 md:right-24'>
             <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
-              // setdiscordLoginFlag(true);
               // if (walletId == "0.0.1690607")
               //   setUserDetails({ username: "PhoenixDev", discriminator: "6938", id: "1063962925250916424" });
               // else if (walletId == "0.0.1690594")
@@ -484,7 +478,6 @@ const StakingPage = () => {
           </a>
           <div className='absolute flex flex-row gap-4 top-24 right-8 md:top-8 md:right-24'>
             <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
-              // setdiscordLoginFlag(true);
               // if (walletId == "0.0.1690607")
               //   setUserDetails({ username: "PhoenixDev", discriminator: "6938", id: "1063962925250916424" });
               // else if (walletId == "0.0.1690594")
