@@ -387,17 +387,17 @@ const StakingPage = () => {
         </a>
         <div className='absolute flex flex-row gap-4 top-24 right-8 md:top-8 md:right-24'>
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
-            setdiscordLoginFlag(true);
-            if (walletId == "0.0.1690607")
-              setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
-            else if (walletId == "0.0.1690594")
-              setUserDetails({ username: "BayMax", discriminator: "2069" });
+            // setdiscordLoginFlag(true);
+            // if (walletId == "0.0.1690607")
+            //   setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
+            // else if (walletId == "0.0.1690594")
+            //   setUserDetails({ username: "BayMax", discriminator: "2069" });
 
-            if (walletId != null)
-              checkUser()
-            else
-              setText("You must connect HashPack Wallet");
-            // window.location = AUTHORIZATION_URL
+            // if (walletId != null)
+            //   checkUser()
+            // else
+            //   setText("You must connect HashPack Wallet");
+            window.location = AUTHORIZATION_URL
           }} />
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={() => {
             if (walletId != null) {
