@@ -465,8 +465,8 @@ const StakingPage = () => {
             </div>
             <div className='flex flex-col items-center justify-center'>
               <div className='flex flex-row items-center'>
-                <span className="font-mono pl-6 text-md sm:text-xl font-bold text-yellow-400 truncate ...">{rewardedValue}</span>
                 <img className='w-[17px] sm:w-[25px]' loading="lazy" src="/images/iconzap.png" />
+                <span className="font-mono text-md sm:text-xl font-bold text-yellow-400 truncate ...">{rewardedValue}</span>
               </div>
               <span className="font-mono pl-6 text-md sm:text-xl text-gray-500 truncate ...">Rewarded</span>
             </div>
@@ -507,7 +507,7 @@ const StakingPage = () => {
           </div>
           {
             text == "You are not a DeraGods holder" &&
-            <h1 className="absolute w-full mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
+            <h1 className="absolute w-full mt-48 sm:mt-36 text-xl font-bold leading-none tracking-tight text-white text-center sm:text-2xl lg:text-4xl">{text}</h1>
           }
 
           <div className='flex flex-row items-center justify-center w-4/5 md:w-3/5 mt-12 pt-48 pl-8 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
