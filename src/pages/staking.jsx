@@ -27,6 +27,14 @@ const StakingPage = () => {
   const [mirrorNodeNextLink, setMirrorNodeNextLink] = useState(null);
   const [walletNftList, setWalletNftList] = useState(null);
 
+  const [stakedNftCount, setStakedNftCount] = useState(0)
+  const [lockedValue, setLockedValue] = useState(0)
+  const [rewardedValue, setRewardedValue] = useState(0)
+
+  useEffect(() => {
+    getStakeInfo()
+  }, []);
+
   useEffect(() => {
     if (walletData.pairingData != null) {
       console.log(walletData.pairingData.length)
@@ -68,6 +76,30 @@ const StakingPage = () => {
     if (!params.code) return;
     getInfo(params.code);
   }, []);
+
+  const getStakeInfo = async () => {
+    setLoadingView(true)
+
+    const _result = await getRequest(env.SERVER_URL + "/api/stake/get_stake_info")
+    if (!_result) {
+      toast.error("Something wrong with server!")
+      setLoadingView(false)
+      return
+    }
+    if (_result.result == false) {
+      toast.error(_result.error)
+      setLoadingView(false)
+      return
+    }
+
+    console.log(_result.data)
+
+    setStakedNftCount(_result.data.stakedNftCount)
+    setLockedValue(_result.data.lockedValue)
+    setRewardedValue(_result.data.rewardedValue)
+
+    setLoadingView(false)
+  }
 
   const onClickDisconnectHashPack = () => {
     disconnect();
@@ -422,29 +454,23 @@ const StakingPage = () => {
                 onClickConnectHashPack();
             }} />
           </div>
-          {
-            walletId != null &&
-            <div className='flex flex-row items-center justify-center w-4/5 md:w-3/5 mb-12 pl-8 mt-12 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
-              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {
-                  walletNftList?.map((item, index) => {
-                    return (
-                      <NftCard
-                        key={index}
-                        nftInfo={item}
-                        onClickStake={async (nftInfo) => {
-                          await onStakeHandle(nftInfo);
-                        }}
-                        onClickUnStake={async (nftInfo) => {
-                          await onUnStakeHandle(nftInfo);
-                        }}
-                      />
-                    )
-                  })
-                }
-              </div>
+          <div className='absolute w-full top-40 sm:top-24 flex flex-row items-center justify-center divide-x-2 divide-gray-700'>
+            <div className='flex flex-col items-center justify-center'>
+              <span className="font-mono pr-6 text-md sm:text-xl font-bold text-gray-900 truncate ...">{stakedNftCount}/{env.DERAGODS_NFT_COUNT}</span>
+              <span className="font-mono pr-6 text-md sm:text-xl text-gray-500 truncate ...">Gods Staked</span>
             </div>
-          }
+            <div className='flex flex-col items-center justify-center'>
+              <span className="font-mono pl-6 pr-6 text-md sm:text-xl font-bold text-gray-900 truncate ...">${lockedValue}</span>
+              <span className="font-mono pl-6 pr-6 text-md sm:text-xl text-gray-500 truncate ...">Value Locked</span>
+            </div>
+            <div className='flex flex-col items-center justify-center'>
+              <div className='flex flex-row items-center'>
+                <span className="font-mono pl-6 text-md sm:text-xl font-bold text-gray-900 truncate ...">{rewardedValue}</span>
+                <img className='w-[17px] sm:w-[25px]' loading="lazy" src="/images/iconzap.png" />
+              </div>
+              <span className="font-mono pl-6 text-md sm:text-xl text-gray-500 truncate ...">Rewarded</span>
+            </div>
+          </div>
         </div>
       }
       {
@@ -479,7 +505,12 @@ const StakingPage = () => {
                 onClickConnectHashPack();
             }} />
           </div>
-          <div className='flex flex-row items-center justify-center w-4/5 md:w-3/5 mb-12 pl-8 mt-12 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
+          {
+            text == "You are not a DeraGods holder" &&
+            <h1 className="absolute w-full mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
+          }
+
+          <div className='flex flex-row items-center justify-center w-4/5 md:w-3/5 mt-12 pt-48 pl-8 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {
                 walletNftList?.map((item, index) => {
