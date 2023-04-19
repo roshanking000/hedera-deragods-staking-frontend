@@ -22,7 +22,7 @@ const StakingPage = () => {
 
   const [userDetails, setUserDetails] = useState(null);
   const [token, setToken] = useState(null);
-  const [text, setText] = useState("You must connect your Discord")
+  const [text, setText] = useState("You can connect your Discord")
 
   const [mirrorNodeNextLink, setMirrorNodeNextLink] = useState(null);
   const [walletNftList, setWalletNftList] = useState(null);
@@ -58,7 +58,7 @@ const StakingPage = () => {
       if (walletId != null)
         checkUser()
       else
-        setText("You must connect HashPack Wallet");
+        setText("You can connect HashPack Wallet");
     }
   }, [userDetails]);
 
@@ -383,7 +383,7 @@ const StakingPage = () => {
           autoPlay
           loop
           muted
-          className="absolute w-[97%] h-[100%] opacity-50"
+          className="absolute w-[97%] h-[100%] z-1"
         >
           <source
             src="/videos/forbc.mp4"
@@ -401,14 +401,14 @@ const StakingPage = () => {
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
             // setdiscordLoginFlag(true);
             // if (walletId == "0.0.1690607")
-            //   setUserDetails({ username: "PhoenixDev", discriminator: "6938" });
+            //   setUserDetails({ username: "PhoenixDev", discriminator: "6938", id: "1063962925250916424" });
             // else if (walletId == "0.0.1690594")
-            //   setUserDetails({ username: "BayMax", discriminator: "2069" });
+            //   setUserDetails({ username: "BayMax", discriminator: "2069", id: "1063962925250916425" });
 
             // if (walletId != null)
             //   checkUser()
             // else
-            //   setText("You must connect HashPack Wallet");
+            //   setText("You can connect HashPack Wallet");
             window.location = AUTHORIZATION_URL
           }} />
           <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={() => {
@@ -422,20 +422,20 @@ const StakingPage = () => {
         </div>
         {
           walletId == null &&
-          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
+          <h1 className="absolute w-full mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null && discordLoginFlag == false &&
-          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
+          <h1 className="absolute w-full mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null && text == "You are not a DeraGods holder" &&
-          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
+          <h1 className="absolute w-full mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null &&
-          <div className='flex flex-col w-4/5 md:w-3/5 mb-12 pl-8 mt-12 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className='flex flex-row items-center justify-center mb-12 pl-8 mt-12 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto overflow-scroll'>
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 w-4/5 md:w-3/5 h-[35rem]">
               {
                 walletNftList?.map((item, index) => {
                   return (

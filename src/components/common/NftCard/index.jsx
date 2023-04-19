@@ -34,12 +34,12 @@ const NftCard = ({
                     <div className="p-2">
                         <div className='flex flex-row items-center justify-between mb-2'>
                             <div className='flex flex-row items-center'>
-                                <h5 className="font-sans text-md text-amber-400">5/ day</h5>
+                                <h5 className="font-sans text-md text-black">5/ day</h5>
                                 <img width="36" height="36" loading="lazy" src="/images/iconzap.png" />
                             </div>
                             <div className='flex flex-row items-center'>
                                 <img width="24" loading="lazy" src="/images/dot.png" />
-                                <h5 className="font-sans text-md truncate ...">{nftInfo.name}</h5>
+                                <h5 className="font-sans text-md text-black truncate ...">{nftInfo.name}</h5>
                             </div>
                         </div>
                         <div className='flex flex-row justify-start items-center gap-4'>
