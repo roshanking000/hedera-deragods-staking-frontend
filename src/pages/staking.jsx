@@ -454,18 +454,18 @@ const StakingPage = () => {
                 onClickConnectHashPack();
             }} />
           </div>
-          <div className='absolute w-full top-40 sm:top-24 flex flex-row items-center justify-center divide-x-2 divide-gray-700'>
+          <div className='absolute w-full top-48 sm:top-24 flex flex-row items-center justify-center divide-x-2 divide-gray-700'>
             <div className='flex flex-col items-center justify-center'>
               <span className="font-mono pr-6 text-md sm:text-xl font-bold text-gray-900 truncate ...">{stakedNftCount}/{env.DERAGODS_NFT_COUNT}</span>
               <span className="font-mono pr-6 text-md sm:text-xl text-gray-500 truncate ...">Gods Staked</span>
             </div>
             <div className='flex flex-col items-center justify-center'>
-              <span className="font-mono pl-6 pr-6 text-md sm:text-xl font-bold text-gray-900 truncate ...">${lockedValue}</span>
+              <span className="font-mono pl-6 pr-6 text-md sm:text-xl font-bold text-green-400 truncate ...">${lockedValue}</span>
               <span className="font-mono pl-6 pr-6 text-md sm:text-xl text-gray-500 truncate ...">Value Locked</span>
             </div>
             <div className='flex flex-col items-center justify-center'>
               <div className='flex flex-row items-center'>
-                <span className="font-mono pl-6 text-md sm:text-xl font-bold text-gray-900 truncate ...">{rewardedValue}</span>
+                <span className="font-mono pl-6 text-md sm:text-xl font-bold text-yellow-400 truncate ...">{rewardedValue}</span>
                 <img className='w-[17px] sm:w-[25px]' loading="lazy" src="/images/iconzap.png" />
               </div>
               <span className="font-mono pl-6 text-md sm:text-xl text-gray-500 truncate ...">Rewarded</span>
