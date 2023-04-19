@@ -422,15 +422,15 @@ const StakingPage = () => {
         </div>
         {
           walletId == null &&
-          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">{text}</h1>
+          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null && discordLoginFlag == false &&
-          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">{text}</h1>
+          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null && text == "You are not a DeraGods holder" &&
-          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">{text}</h1>
+          <h1 className="mt-16 text-xl font-bold leading-none tracking-tight text-black text-center sm:text-2xl lg:text-4xl">{text}</h1>
         }
         {
           walletId != null &&
