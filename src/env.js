@@ -3,7 +3,7 @@ export const DISCORD_OAUTH_TOKEN_URL = "https://discord.com/api/oauth2/token";
 export const DISCORD_OAUTH_USER_URL = "https://discord.com/api/users/@me";
 export const CLIENT_ID = "1096182637619593268"
 export const CLIENT_SECRET = "d3shDcaKEZHoh08eCuA1uO1NAJ86S2Dn"
-export const REDIRECT_URL = "https://deragods-staking.web.app/"
+export const REDIRECT_URL = "https://stake.deragods.com"
 
 export const NETWORK_TYPE = "mainnet";
 export const MIRROR_NET_URL = "https://mainnet-public.mirrornode.hedera.com";
@@ -14,7 +14,7 @@ export const COINGECKO_URL = "https://api.coingecko.com";
 
 // export const SERVER_URL = "http://localhost:5000";
 // export const SERVER_URL = "http://95.217.63.153:5000";
-export const SERVER_URL = "https://app.deragods.com";
+export const SERVER_URL = "https://app.deragods.com:3007";
 
 export const DERAGODS_NFT_ID = "0.0.1099951";
 export const DERAGODS_NFT_COUNT = 303;

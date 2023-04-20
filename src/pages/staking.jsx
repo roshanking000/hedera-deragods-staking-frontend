@@ -247,7 +247,7 @@ const StakingPage = () => {
     }
 
     if (_newWalletNftInfo.length == 0)
-      setText("You are not a DeraGods holder");
+      setText("You are not a DeraGods Holder");
 
     return _newWalletNftInfo
   }
@@ -499,7 +499,7 @@ const StakingPage = () => {
             }} />
           </div>
           {
-            text == "You are not a DeraGods holder" &&
+            text == "You are not a DeraGods Holder" &&
             <h1 className="absolute w-full mt-48 sm:mt-36 text-xl font-bold leading-none tracking-tight text-white text-center sm:text-2xl lg:text-4xl">{text}</h1>
           }
 
