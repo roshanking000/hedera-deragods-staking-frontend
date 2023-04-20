@@ -470,7 +470,7 @@ const StakingPage = () => {
       {
         walletId != null && discordLoginFlag == true &&
         <div className='staking-container'>
-          <a href="https://deragods-staking.web.app/">
+          <a href="https://stake.deragods.com">
             <img width="108" loading="lazy" src="/icons/Logo.png" />
           </a>
           <a href="https://www.plutopeer.com/" target="_blank" rel="noreferrer">
