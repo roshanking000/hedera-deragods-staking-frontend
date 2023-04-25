@@ -77,7 +77,7 @@ const StakingPage = () => {
     }
 
     setStakedNftCount(_result.data.stakedNftCount)
-    setLockedValue(_result.data.lockedValue)
+    setLockedValue(parseInt(_result.data.lockedValue, 10))
     setRewardedValue(_result.data.rewardedValue)
 
     setLoadingView(false)
@@ -472,7 +472,7 @@ const StakingPage = () => {
             <h1 className="absolute w-full mt-48 sm:mt-36 text-xl font-bold leading-none tracking-tight text-white text-center sm:text-2xl lg:text-4xl">{text}</h1>
           }
 
-          <div className='flex flex-row justify-center w-4/5 md:w-3/5 pl-8 pr-8 mb-24 gap-8 overflow-y-auto'>
+          <div className='flex flex-row justify-center w-4/5 md:w-3/5 pl-8 pr-8 mb-24 mt-12 md:mt-0 gap-8 overflow-y-auto'>
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {
                 walletNftList?.map((item, index) => {
