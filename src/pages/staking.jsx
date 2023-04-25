@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from "react-redux";
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import NftCard from '../components/common/NftCard'
-import { useHashConnect } from "../components/common/HashConnectAPIProvider";
+import { hc } from "../components/common/api/HashConnectAPIProvider";
+
 import { getRequest, postRequest } from "../components/common/api/apiRequests";
 import LoadingLayout from "../components/common/api/LoadingLayout"
 import * as env from "../env";
@@ -12,10 +14,6 @@ import './staking.css'
 
 const StakingPage = () => {
   const AUTHORIZATION_URL = `${env.DISCORD_OAUTH_AUTHORIZE_URL}?response_type=code&client_id=${env.CLIENT_ID}&scope=identify&prompt=consent`;
-
-  const { walletData, installedExtensions, connect, disconnect } = useHashConnect();
-
-  const [walletId, setWalletId] = useState(null)
 
   const [loadingView, setLoadingView] = useState(false);
   const [discordLoginFlag, setdiscordLoginFlag] = useState(false);
@@ -26,33 +24,21 @@ const StakingPage = () => {
 
   const [mirrorNodeNextLink, setMirrorNodeNextLink] = useState(null);
   const [walletNftList, setWalletNftList] = useState(null);
+  const [totalPoint, setTotalPoint] = useState(0)
 
   const [stakedNftCount, setStakedNftCount] = useState(0)
   const [lockedValue, setLockedValue] = useState(0)
   const [rewardedValue, setRewardedValue] = useState(0)
+
+  const connectedHedera = useSelector((state) => state.auth.hederaWalletStatus);
+  const walletId = useSelector((state) => state.auth.hederaWallet);
 
   useEffect(() => {
     getStakeInfo()
   }, []);
 
   useEffect(() => {
-    if (walletData.pairingData != null) {
-      if (walletData.pairingData.length != 0) {
-        if (walletData.pairingData.length == undefined) {
-          setWalletId(walletData.pairingData.accountIds[0])
-        }
-        else {
-          setWalletId(walletData.pairingData[0].accountIds[0])
-        }
-      }
-    }
-    else {
-      setWalletId(null)
-    }
-  }, [walletData]);
-
-  useEffect(() => {
-    if (walletId != null) {
+    if (walletId != "") {
       if (discordLoginFlag == true)
         checkUser()
     }
@@ -61,7 +47,7 @@ const StakingPage = () => {
   useEffect(() => {
     if (userDetails != null) {
       setdiscordLoginFlag(true);
-      if (walletId != null)
+      if (walletId != "")
         checkUser()
       else
         setText("You can connect HashPack Wallet");
@@ -96,20 +82,6 @@ const StakingPage = () => {
 
     setLoadingView(false)
   }
-
-  const onClickDisconnectHashPack = () => {
-    disconnect();
-  }
-
-  const onClickConnectHashPack = () => {
-    if (installedExtensions) {
-      connect();
-    } else {
-      alert(
-        "Please install HashPack wallet extension first. from chrome web store."
-      );
-    }
-  };
 
   {/** -------------- Discord Login --------------- */ }
   const getInfo = async (code) => {
@@ -175,6 +147,7 @@ const StakingPage = () => {
       return
     }
 
+    setTotalPoint(_result.totalPoint)
     await getNftDetailData(_nftData, _result.data)
 
     setLoadingView(false)
@@ -328,15 +301,15 @@ const StakingPage = () => {
   const onStakeHandle = async (nftInfo_) => {
     setLoadingView(true);
     let stakingInfo = {
-      token_id: btoa(nftInfo_.token_id),
-      serial_number: btoa(nftInfo_.serial_number),
+      token_id: nftInfo_.token_id,
+      serial_number: nftInfo_.serial_number,
     };
 
     const _postData = {
-      discordId: btoa(userDetails.id),
-      discordName: btoa(userDetails.username),
-      discriminator: btoa(userDetails.discriminator),
-      walletId: btoa(walletId),
+      discordId: userDetails.id,
+      discordName: userDetails.username,
+      discriminator: userDetails.discriminator,
+      walletId: walletId,
       nftInfo: stakingInfo
     };
 
@@ -359,15 +332,15 @@ const StakingPage = () => {
   const onUnStakeHandle = async (nftInfo_) => {
     setLoadingView(true);
     let unstakingInfo = {
-      token_id: btoa(nftInfo_.token_id),
-      serial_number: btoa(nftInfo_.serial_number),
+      token_id: nftInfo_.token_id,
+      serial_number: nftInfo_.serial_number,
     };
 
     const _postData = {
-      discordId: btoa(userDetails.id),
-      discordName: btoa(userDetails.username),
-      discriminator: btoa(userDetails.discriminator),
-      walletId: btoa(walletId),
+      discordId: userDetails.id,
+      discordName: userDetails.username,
+      discriminator: userDetails.discriminator,
+      walletId: walletId,
       nftInfo: unstakingInfo
     };
 
@@ -406,7 +379,7 @@ const StakingPage = () => {
   return (
     <>
       {
-        (walletId == null || discordLoginFlag == false) &&
+        (walletId == "" || discordLoginFlag == false) &&
         <div>
           <video
             autoPlay
@@ -433,19 +406,15 @@ const StakingPage = () => {
               // else if (walletId == "0.0.1690594")
               //   setUserDetails({ username: "BayMax", discriminator: "2069", id: "1063962925250916425" });
 
-              // if (walletId != null)
-              //   checkUser()
-              // else
+              // if (walletId == "")
               //   setText("You can connect HashPack Wallet");
               window.location = AUTHORIZATION_URL
             }} />
-            <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={() => {
-              if (walletId != null) {
-                setWalletId(null)
-                onClickDisconnectHashPack();
-              }
+            <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={async () => {
+              if (connectedHedera == false)
+                hc.connectToLocalWallet()
               else
-                onClickConnectHashPack();
+                await hc.disconnect(hc.hcData.topic);
             }} />
           </div>
           <div className='absolute w-full top-48 sm:top-24 flex flex-row items-center justify-center divide-x-2 divide-gray-700'>
@@ -468,7 +437,7 @@ const StakingPage = () => {
         </div>
       }
       {
-        walletId != null && discordLoginFlag == true &&
+        walletId != "" && discordLoginFlag == true &&
         <div className='staking-container'>
           <a href="https://stake.deragods.com">
             <img width="108" loading="lazy" src="/icons/Logo.png" />
@@ -476,26 +445,26 @@ const StakingPage = () => {
           <a href="https://www.plutopeer.com/" target="_blank" rel="noreferrer">
             <img className='absolute left-[15px] bottom-[20px]' width="140" loading="lazy" src="/icons/Plutopeer.png" />
           </a>
-          <div className='absolute flex flex-row gap-4 top-24 right-8 md:top-8 md:right-24'>
+          <div className='absolute flex flex-row items-center gap-4 top-24 right-8 md:top-8 md:right-24'>
+            <div className='flex flex-row items-center'>
+              <img loading="lazy" src="/images/iconzap.png" />
+              <h5 className="font-sans text-2xl text-amber-400">{totalPoint}</h5>
+            </div>
             <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/discord-login-button.jpg" onClick={() => {
               // if (walletId == "0.0.1690607")
               //   setUserDetails({ username: "PhoenixDev", discriminator: "6938", id: "1063962925250916424" });
               // else if (walletId == "0.0.1690594")
               //   setUserDetails({ username: "BayMax", discriminator: "2069", id: "1063962925250916425" });
 
-              // if (walletId != null)
-              //   checkUser()
-              // else
+              // if (walletId != "")
               //   setText("You can connect HashPack Wallet");
               window.location = AUTHORIZATION_URL
             }} />
-            <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={() => {
-              if (walletId != null) {
-                setWalletId(null)
-                onClickDisconnectHashPack();
-              }
+            <img className='rounded-lg hover:cursor-pointer' width="48" loading="lazy" src="/images/hashpack-connect-button.webp" onClick={async () => {
+              if (connectedHedera == false)
+                hc.connectToLocalWallet()
               else
-                onClickConnectHashPack();
+                await hc.disconnect(hc.hcData.topic);
             }} />
           </div>
           {
@@ -503,7 +472,7 @@ const StakingPage = () => {
             <h1 className="absolute w-full mt-48 sm:mt-36 text-xl font-bold leading-none tracking-tight text-white text-center sm:text-2xl lg:text-4xl">{text}</h1>
           }
 
-          <div className='flex flex-row items-center justify-center w-4/5 md:w-3/5 mt-12 pt-48 pl-8 pr-8 mb-24 gap-8 rounded-xl overflow-y-auto'>
+          <div className='flex flex-row justify-center w-4/5 md:w-3/5 pl-8 pr-8 mb-24 gap-8 overflow-y-auto'>
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {
                 walletNftList?.map((item, index) => {

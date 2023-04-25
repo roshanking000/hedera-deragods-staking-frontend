@@ -5,17 +5,18 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 
+import { store } from "./store";
+import { Provider } from "react-redux";
 // hashpack
-import HashConnectProvider from "./components/common/HashConnectAPIProvider";
-import { HashConnect } from "hashconnect";
-const hashConnect = new HashConnect(true);
+import { HashConnectClient } from "./components/common/api/HashConnectAPIProvider";
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <BrowserRouter>
-    <HashConnectProvider hashConnect={hashConnect}>
+    <Provider store={store}>
+      <HashConnectClient />
       <App />
-    </HashConnectProvider>
+    </Provider>
   </BrowserRouter>
 )
 
